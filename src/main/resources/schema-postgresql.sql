@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS cliente (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(50),
+    cpf VARCHAR(11)
+);
+
+CREATE TABLE IF NOT EXISTS posts (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    cliente_id INTEGER REFERENCES cliente(id),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
