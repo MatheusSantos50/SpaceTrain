@@ -5,10 +5,10 @@ server:
 spring:
   datasource:
     platform: postgres
-    url: jdbc:postgresql://127.0.0.1:5432/spacetrain
+    url: jdbc:postgresql://127.0.0.1:5432/postgres
     username: postgres
     password: root
-    driverClassName: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">SpaceTrain</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <div class="brand">
+      <img th:src="@{/images/rocket_logo_img.png}" alt="Logo" class="brand-logo">
+      Space<span>Train</span>
+    </div>
+    <div class="nav-links">
+      <a th:href="@{/}" th:classappend="${currentPage == 'explore' ? 'active' : ''}">Explore</a>
+      <a th:href="@{/gallery}" th:classappend="${currentPage == 'gallery' ? 'active' : ''}">My Gallery</a>
+      <a th:href="@{/}">Profile</a>
+    </div>
+    <button class="btn-primary" id="btn-add-image">+ Add Image</button>
+  </nav>
+
+  <!-- Main Layout -->
+  <div class="container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3>Categories</h3>
+      <form method="get" th:action="@{${currentPage == 'gallery' ? '/gallery' : '/'}}" class="category-filter-form">
+        <div class="category-list-sidebar">
+          <label class="category-item-sidebar" th:each="categoria : ${categorias}">
+            <input type="checkbox" name="categoriaIds" th:value="${categoria.id}" th:checked="${param.categoriaIds != null and #lists.contains(param.categoriaIds, #strings.toString(categoria.id))}" />
+            <span th:text="${categoria.nome}">Categoria</span>
+          </label>
+        </div>
+        <button type="submit" class="btn-secondary btn-sidebar-filter">Procurar</button>
+      </form>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" layout:fragment="content">
+      <!-- Cada página vai colocar seu conteúdo aqui -->
+    </main>
+
+  </div>
+
+  <!-- Add Image Modal -->
+  <div class="modal-overlay" id="add-image-modal">
+    <div class="modal-content">
+      <button class="close-btn" id="btn-close-modal">&times;</button>
+      <h2>Post to SpaceTrain</h2>
+
+      <form id="add-image-form" method="post" enctype="multipart/form-data" th:action="@{/imagem}">
+        <div class="form-group file-upload-area">
+          <label for="file-upload">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" style="margin-bottom:10px;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <br>
+            Click to upload your space photo
+          </label>
+          <input type="file" id="file-upload" name="file" accept="image/*" required>
+        </div>
+
+        <div class="form-group">
+          <label for="photo-title">Title</label>
+          <input type="text" id="photo-title" name="titulo" class="form-control" placeholder="e.g. Andromeda Galaxy" required>
+        </div>
+
+        <div class="form-group">
+          <label for="photo-description">Description</label>
+          <textarea id="photo-description" name="descricao" class="form-control" placeholder="Add a description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Categories (Select at least one)</label>
+          <div class="category-select-grid">
+            <label class="category-select-item" th:each="categoria : ${categorias}">
+              <input type="checkbox" name="categoriaIds" th:value="${categoria.id}" />
+              <span th:text="${categoria.nome}">Categoria</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- clientId removed: user is taken from session after login -->
+
+        <button type="submit" class="btn-primary btn-block">Upload Image</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Image Modal -->
+  <div class="modal-overlay" id="edit-image-modal">
+    <div class="modal-content">
+      <button class="close-btn" id="btn-close-edit-modal">&times;</button>
+      <h2>Edit Space Post</h2>
+
+      <form id="edit-image-form" method="post" enctype="multipart/form-data" th:action="@{/imagem/editar}">
+        <input type="hidden" id="edit-image-id" name="id">
+
+        <div class="form-group file-upload-area">
+          <label for="edit-file-upload">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" style="margin-bottom:10px;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <br>
+            Click to replace your space photo (Optional)
+          </label>
+          <input type="file" id="edit-file-upload" name="file" accept="image/*">
+        </div>
+
+        <div class="form-group">
+          <label for="edit-photo-title">Title</label>
+          <input type="text" id="edit-photo-title" name="titulo" class="form-control" placeholder="e.g. Andromeda Galaxy" required>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-photo-description">Description</label>
+          <textarea id="edit-photo-description" name="descricao" class="form-control" placeholder="Add a description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Categories (Select at least one)</label>
+          <div class="category-select-grid">
+            <label class="category-select-item" th:each="categoria : ${categorias}">
+              <input type="checkbox" name="categoriaIds" th:value="${categoria.id}" class="edit-category-checkbox" />
+              <span th:text="${categoria.nome}">Categoria</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary btn-block">Save Changes</button>
+        <button type="button" id="btn-delete-image" class="btn-danger">Delete Image</button>
+      </form>
+
+      <!-- Hidden delete form -->
+      <form id="delete-image-form" method="post" th:action="@{/imagem/deletar}" style="display:none;">
+        <input type="hidden" id="delete-image-id" name="id">
+      </form>
+    </div>
+  </div>
+
+  <script th:src="@{/js/script.js}"></script>
+</body>
+</html>
