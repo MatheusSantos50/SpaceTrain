@@ -23,17 +23,6 @@ CREATE TABLE IF NOT EXISTS categorias (
     nome VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO categorias (nome) VALUES
-('Planeta'),
-('Meteoro'),
-('Buraco Negro'),
-('Asteroide'),
-('Galáxia'),
-('Satélite Natural'),
-('Supernova'),
-('Estrela')
-ON CONFLICT (nome) DO NOTHING;
-
 CREATE TABLE IF NOT EXISTS imagem_categorias (
     imagem_id INTEGER REFERENCES imagens(id) ON DELETE CASCADE,
     categoria_id INTEGER REFERENCES categorias(id) ON DELETE CASCADE,
