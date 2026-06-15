@@ -42,4 +42,29 @@ public class LoginController {
         session.invalidate();
         return "redirect:/login";
     }
+
+    @GetMapping("/cadastrar")
+    public String registerPage(@RequestParam(value = "error", required = false) String error, Model model) {
+        model.addAttribute("error", error);
+        return "cadastro";
+    }
+
+    @PostMapping("/cadastrar")
+    public String doRegister(@RequestParam("nome") String nome,
+                             @RequestParam("email") String email,
+                             @RequestParam("senha") String senha,
+                             Model model) {
+        Usuario u = new Usuario();
+        u.setNome(nome);
+        u.setEmail(email);
+        u.setSenha(senha);
+        try {
+            usuarioService.register(u);
+            return "redirect:/login?registered=true";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/cadastrar?error=" + e.getMessage();
+        } catch (Exception e) {
+            return "redirect:/cadastrar?error=generic";
+        }
+    }
 }

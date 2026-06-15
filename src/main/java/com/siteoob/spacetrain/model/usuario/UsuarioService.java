@@ -22,4 +22,18 @@ public class UsuarioService {
             throw new RuntimeException(e);
         }
     }
+
+    public void register(Usuario u) {
+        try {
+            if (usuarioDAO.existsByEmail(u.getEmail())) {
+                throw new IllegalArgumentException("email");
+            }
+            if (usuarioDAO.existsByNome(u.getNome())) {
+                throw new IllegalArgumentException("nome");
+            }
+            usuarioDAO.save(u);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

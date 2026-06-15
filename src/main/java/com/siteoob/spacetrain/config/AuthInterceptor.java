@@ -13,7 +13,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
-        if (uri.equals("/login") || uri.equals("/logout") || uri.startsWith("/css") || uri.startsWith("/js") || uri.startsWith("/images") || uri.equals("/error") || uri.equals("/favicon.ico") || uri.startsWith("/uploads")) {
+        if (uri.equals("/login") || uri.equals("/cadastrar") || uri.equals("/logout") || uri.startsWith("/css") || uri.startsWith("/js") || uri.startsWith("/images") || uri.equals("/error") || uri.equals("/favicon.ico") || uri.startsWith("/uploads")) {
             return true;
         }
 
