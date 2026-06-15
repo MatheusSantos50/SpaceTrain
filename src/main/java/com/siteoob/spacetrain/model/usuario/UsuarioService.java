@@ -2,6 +2,7 @@ package com.siteoob.spacetrain.model.usuario;
 
 import java.sql.SQLException;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,11 @@ public class UsuarioService {
 
     public Usuario authenticate(String nome, String senha) {
         try {
-            return usuarioDAO.findByNomeAndSenha(nome, senha);
+            Usuario u = usuarioDAO.findByNome(nome);
+            if (u != null && BCrypt.checkpw(senha, u.getSenha())) {
+                return u;
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -31,6 +36,8 @@ public class UsuarioService {
             if (usuarioDAO.existsByNome(u.getNome())) {
                 throw new IllegalArgumentException("nome");
             }
+            String hashedPassword = BCrypt.hashpw(u.getSenha(), BCrypt.gensalt());
+            u.setSenha(hashedPassword);
             usuarioDAO.save(u);
         } catch (SQLException e) {
             throw new RuntimeException(e);

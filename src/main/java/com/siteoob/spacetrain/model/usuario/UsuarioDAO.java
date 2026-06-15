@@ -20,12 +20,11 @@ public class UsuarioDAO {
         this.dataSource = dataSource;
     }
 
-    public Usuario findByNomeAndSenha(String nome, String senha) throws SQLException {
-        String sql = "SELECT id, nome, email, senha FROM usuarios WHERE nome = ? AND senha = ?";
+    public Usuario findByNome(String nome) throws SQLException {
+        String sql = "SELECT id, nome, email, senha FROM usuarios WHERE nome = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, nome);
-            stmt.setString(2, senha);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario u = new Usuario();
