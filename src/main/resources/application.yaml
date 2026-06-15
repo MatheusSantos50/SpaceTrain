@@ -5,9 +5,9 @@ server:
 spring:
   datasource:
     platform: postgres
-    url: jdbc:postgresql://dpg-d8jg22rtqb8s73c42lm0-a.oregon-postgres.render.com:5432/spacetrain?sslmode=require
-    username: spacetrain_user
-    password: HUdQBnmx3Pj6hd7xaBXr2LSWUq0902sS
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
