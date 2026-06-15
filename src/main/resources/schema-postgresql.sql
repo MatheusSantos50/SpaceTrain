@@ -31,7 +31,8 @@ INSERT INTO categorias (nome) VALUES
 ('Galáxia'),
 ('Satélite Natural'),
 ('Supernova'),
-('Estrela');
+('Estrela')
+ON CONFLICT (nome) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS imagem_categorias (
     imagem_id INTEGER REFERENCES imagens(id) ON DELETE CASCADE,
